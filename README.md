@@ -65,7 +65,7 @@ For the Polymarket event with the largest 15-minute probability move, let $d = +
 $$
 \Delta p^{\text{expected}} = k \cdot 100\,\Delta S_{15m} \cdot d,
 \qquad
-\text{center} = \text{mid} + \operatorname{clip}\!\left(\Delta p^{\text{expected}} - \Delta p_{15m},\ \pm 0.05\right)
+\text{center} = \text{mid} + \mathrm{clip}\left(\Delta p^{\text{expected}} - \Delta p_{15m},\ \pm 0.05\right)
 $$
 
 Here $\Delta S_{15m}$ is `price_delta_15m_pct` (a fraction), $\Delta p_{15m}$ is `prob_delta_15m`, and $k$ is `momentum_skew_per_pct` (default `0.02`, i.e. 2 probability points per 1% spot move). Quotes are placed at `center ± BASE_HALF_SPREAD × multiplier` and rounded outward to the 1-cent tick.
