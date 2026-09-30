@@ -49,10 +49,12 @@ Raw VPIN depends on each pair's trade-size distribution, so the ladder uses `vpi
 
 | Condition | Action | Bot behaviour |
 |---|---|---|
-| `vpin_percentile >= 0.95` (or `ob_toxicity_1pct > 2.0`) **and** cross-market divergence | `HALT_MAKER_QUOTES` | Cancel every resting quote |
-| `vpin_percentile >= 0.90`, or `ob_toxicity_1pct > 2.0` | `WIDEN_SPREAD_2X` | Quote at 2.0x `BASE_HALF_SPREAD` |
+| `vpin_percentile >= 0.95` (or a toxic 1% book\*) **and** cross-market divergence | `HALT_MAKER_QUOTES` | Cancel every resting quote |
+| `vpin_percentile >= 0.90`, or a toxic 1% book\* | `WIDEN_SPREAD_2X` | Quote at 2.0x `BASE_HALF_SPREAD` |
 | Divergence only (or halt downgraded by low semantic confidence) | `WIDEN_SPREAD_1_5X` | Quote at 1.5x `BASE_HALF_SPREAD` |
 | Otherwise | `NONE` | Quote at 1.0x `BASE_HALF_SPREAD` |
+
+\* With `followsm-sdk` 1.6.0 or later, a toxic 1% book means the ±1% imbalance is in either extreme tail of the symbol's own recent history (`ob_imbalance_percentile <= 0.01` or `>= 0.99`); some books are structurally bid- or ask-heavy, so a fixed ratio misfires on them. While that percentile is warming up, and on older SDKs, it means `ob_toxicity_1pct > 2.0`.
 
 `HALT_MAKER_QUOTES` is never issued when the divergence rests on a Polymarket market whose `direction_confidence` is below `min_semantic_confidence`. It is downgraded to `WIDEN_SPREAD_1_5X` instead.
 
